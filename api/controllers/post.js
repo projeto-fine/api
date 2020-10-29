@@ -40,6 +40,7 @@ module.exports = () => {
             as: "user",
           },
         },
+        { $unwind: "$user" },
       ]);
       res.send(posts);
     } catch (err) {
