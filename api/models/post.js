@@ -1,15 +1,15 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
 const postSchema = new Schema({
   content: {
     type: Object,
-    required: [true, "Content required"],
+    required: [true, 'Content required'],
   },
   user: {
     type: mongoose.Types.ObjectId,
-    required: [true, "User Id required"],
+    required: [true, 'User Id required'],
   },
   likes: {
     type: Number,
@@ -23,4 +23,4 @@ const postSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("posts", postSchema);
+module.exports = mongoose.model('posts', postSchema);

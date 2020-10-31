@@ -1,4 +1,4 @@
-const User = require("../models/user");
+const User = require('../models/user');
 
 module.exports = () => {
   const controller = {};
@@ -9,6 +9,7 @@ module.exports = () => {
         name: req.body.name,
         title: req.body.title,
         type: req.body.type,
+        imageURL: req.body.imageURL || null,
       };
       res.send(await User.create(user));
     } catch (err) {
@@ -18,7 +19,7 @@ module.exports = () => {
 
   controller.getUser = async (req, res) => {
     try {
-      const { userId } = req.query;
+      const { userId } = req.params;
       res.send(await User.findById(userId));
     } catch (err) {
       res.status(500).send({ error: err.message });

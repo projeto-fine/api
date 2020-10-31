@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Post = require("../models/post");
+const mongoose = require('mongoose');
+const Post = require('../models/post');
 
 module.exports = () => {
   const controller = {};
@@ -8,10 +8,10 @@ module.exports = () => {
     try {
       const post = {
         content: req.body.content,
-        user: req.body.user,
-        likes: req.body.likes,
-        saves: req.body.saves,
-        creationDate: req.body.creationDate,
+        user: new mongoose.Types.ObjectId(req.body.user),
+        likes: req.body.likes || 0,
+        saves: req.body.saves || 0,
+        creationDate: req.body.creationDate || new Date(),
       };
       res.send(await Post.create(post));
     } catch (err) {
@@ -21,7 +21,7 @@ module.exports = () => {
 
   controller.getPost = async (req, res) => {
     try {
-      const { postId } = req.query;
+      const { postId } = req.params;
       res.send(await Post.findById(postId));
     } catch (err) {
       res.status(500).send({ error: err.message });
@@ -30,19 +30,27 @@ module.exports = () => {
 
   controller.listPosts = async (req, res) => {
     try {
+      const perPage = req.query.perPage || 9;
+      const page = req.query.page || 1;
+
       const posts = await Post.aggregate([
         { $sort: { creationDate: -1 } },
         {
           $lookup: {
-            from: "users",
-            localField: "user",
-            foreignField: "_id",
-            as: "user",
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user',
           },
         },
-        { $unwind: "$user" },
-      ]);
-      res.send(posts);
+        { $unwind: '$user' },
+      ])
+        .skip(perPage * page - perPage)
+        .limit(perPage);
+      res.send({
+        posts,
+        nextPage: parseInt(page) + 1,
+      });
     } catch (err) {
       res.status(500).send({ error: err.message });
     }
@@ -57,7 +65,7 @@ module.exports = () => {
             _id: 0,
             likes: 1,
             saves: 1,
-            month: { $month: "$creationDate" },
+            month: { $month: '$creationDate' },
           },
         },
       ]);

@@ -15,6 +15,6 @@
         "ecmaVersion": 11
     },
     "rules": {
-      "quotes": "off"
+      "radix": "off"
     }
 }
