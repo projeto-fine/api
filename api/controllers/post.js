@@ -30,8 +30,8 @@ module.exports = () => {
 
   controller.listPosts = async (req, res) => {
     try {
-      const perPage = req.query.perPage || 9;
-      const page = req.query.page || 1;
+      const perPage = parseInt(req.query.perPage) || 9;
+      const page = parseInt(req.query.page) || 1;
 
       const posts = await Post.aggregate([
         { $sort: { creationDate: -1 } },
@@ -49,7 +49,7 @@ module.exports = () => {
         .limit(perPage);
       res.send({
         posts,
-        nextPage: parseInt(page) + 1,
+        nextPage: page + 1,
       });
     } catch (err) {
       res.status(500).send({ error: err.message });
