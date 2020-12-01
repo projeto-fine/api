@@ -28,6 +28,15 @@ module.exports = () => {
     }
   };
 
+  controller.getLatestPosts = async (req, res) => {
+    try {
+      const { from } = req.query;
+      res.send(await Post.find({ creationDate: { $gte: new Date(from) } }));
+    } catch (err) {
+      res.status(500).send({ error: err.message });
+    }
+  };
+
   controller.listPosts = async (req, res) => {
     try {
       const perPage = parseInt(req.query.perPage) || 9;
@@ -39,7 +48,7 @@ module.exports = () => {
           $lookup: {
             from: 'users',
             localField: 'user',
-            foreignField: '_id',
+            foreignField: 'userId',
             as: 'user',
           },
         },

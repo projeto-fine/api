@@ -18,6 +18,10 @@ const userSchema = new Schema({
   imageURL: {
     type: String,
   },
+  userId: {
+    type: String,
+    required: [true, 'String required'],
+  },
 });
 
 module.exports = mongoose.model('users', userSchema);

@@ -8,7 +8,7 @@ const postSchema = new Schema({
     required: [true, 'Content required'],
   },
   user: {
-    type: mongoose.Types.ObjectId,
+    type: String,
     required: [true, 'User Id required'],
   },
   likes: {
@@ -18,8 +18,8 @@ const postSchema = new Schema({
     type: Number,
   },
   creationDate: {
-    type: Number,
-    default: Date(),
+    type: Date,
+    default: new Date(),
   },
 });
 
