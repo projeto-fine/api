@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Post = require('../models/post');
+const Enum = require('../helpers/enum');
 
 module.exports = () => {
   const controller = {};
@@ -31,7 +32,7 @@ module.exports = () => {
   controller.getLatestPosts = async (req, res) => {
     try {
       const { from } = req.query;
-      res.send(await Post.find({ creationDate: { $gte: new Date(from) } }));
+      res.send(await Post.find({ creationDate: { $gt: new Date(from) } }));
     } catch (err) {
       res.status(500).send({ error: err.message });
     }
@@ -91,6 +92,15 @@ module.exports = () => {
         }
       });
       res.send(grouped);
+    } catch (err) {
+      res.status(500).send({ error: err.message });
+    }
+  };
+
+  controller.updatePostData = async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const { userId, type, interaction } = req.query;
     } catch (err) {
       res.status(500).send({ error: err.message });
     }
